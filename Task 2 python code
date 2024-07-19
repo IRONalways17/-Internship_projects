@@ -1,0 +1,39 @@
+# 1. Import Libraries
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+
+# 2. Load Dataset
+iris = load_iris()
+X = iris.data  # Features: Sepal Length, Sepal Width, Petal Length, Petal Width
+y = iris.target  # Target: Species
+
+# 3. Split Dataset
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Optional: Feature Scaling (especially important for algorithms like SVM)
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# 4. Model Selection
+# Logistic Regression
+model = LogisticRegression(max_iter=200)
+# For Decision Trees: from sklearn.tree import DecisionTreeClassifier; model = DecisionTreeClassifier()
+# For SVM: from sklearn.svm import SVC; model = SVC()
+
+# 5. Model Training
+model.fit(X_train_scaled, y_train)
+
+# 6. Model Evaluation
+y_pred = model.predict(X_test_scaled)
+accuracy = accuracy_score(y_test, y_pred)
+precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred, average='macro')
+
+# 7. Result
+print(f'Accuracy: {accuracy:.4f}')
+print(f'Precision: {precision:.4f}')
+print(f'Recall: {recall:.4f}')
+print(f'F1-Score: {f1:.4f}')
